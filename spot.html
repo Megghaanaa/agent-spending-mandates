@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spot the Safe Mandate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#FFF7EC; --paper:#FFFDF8; --chai:#7A4B2A; --ink:#2E1E14; --muted:#8A7462; --line:#EAD9C3;
+  --chili:#D2452F; --chili-bg:#FDE9E4; --leaf:#2F8A5B; --leaf-bg:#E3F4EA; --shadow:0 6px 0 rgba(122,75,42,.12);
+  --head:"Baloo 2",system-ui,sans-serif; --body:"Inter",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--ink);font:16px/1.5 var(--body);min-height:100vh;display:flex;flex-direction:column;
+  background-image:radial-gradient(var(--line) 1px,transparent 1px);background-size:22px 22px;overflow-x:hidden}
+header{display:flex;align-items:center;gap:16px;padding:18px 32px 6px}
+.logo{font-size:44px;line-height:1;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
+h1{font:700 36px/1 var(--head);margin:0;color:var(--chai)}
+.sub{color:var(--muted);font-size:16px}
+.btns{margin-left:auto;display:flex;gap:10px}
+.btn{border:3px solid var(--chai);background:var(--paper);color:var(--chai);border-radius:16px;padding:8px 18px;font:700 16px var(--head);cursor:pointer;box-shadow:var(--shadow)}
+.btn.main{background:var(--chai);color:#fff}
+.btn:active{transform:translateY(3px);box-shadow:none}
+main{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:28px;padding:22px 36px}
+.card{background:var(--paper);border:3px solid var(--chai);border-radius:22px;box-shadow:var(--shadow);padding:20px 24px;display:flex;flex-direction:column;gap:14px;position:relative;animation:pop .45s cubic-bezier(.2,1.4,.4,1) both;transition:border-color .4s}
+.card:nth-child(2){animation-delay:.08s}.card:nth-child(3){animation-delay:.16s}
+.letter{font:700 56px/1 var(--head);color:var(--chai)}
+.slip{display:grid;grid-template-columns:auto 1fr;gap:9px 18px;font-size:19px;border:2px dashed var(--line);border-radius:14px;padding:16px 18px;background:#fff;position:relative}
+.slip .k{color:var(--muted)}
+.slip b{font-weight:600;justify-self:start}
+.v{position:relative;display:inline-block;padding:0 4px;transition:color .3s}
+.v.none{color:var(--muted);font-style:italic;font-weight:500}
+.v.flaw{color:var(--chili)}
+.v svg{position:absolute;left:-12%;top:-30%;width:124%;height:160%;overflow:visible;pointer-events:none}
+.v svg ellipse{fill:none;stroke:var(--chili);stroke-width:3;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;animation:draw .5s ease-out forwards}
+.notes{min-height:84px;display:flex;flex-direction:column;gap:2px}
+.note{font:700 22px/1.25 var(--head);color:var(--chili);opacity:0;transform:translateY(6px);transition:all .35s}
+.note.good{color:var(--leaf)}
+.note.show{opacity:1;transform:none}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;opacity:0;transition:opacity .4s}
+.pills.show{opacity:1}
+.pill{font:600 13px var(--body);padding:4px 10px;border-radius:999px}
+.pill.ok{background:var(--leaf-bg);color:var(--leaf)}
+.pill.no{background:var(--chili-bg);color:var(--chili)}
+.glass{position:absolute;top:120px;left:-20px;font-size:64px;line-height:1;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;pointer-events:none;z-index:5;filter:drop-shadow(0 4px 0 rgba(122,75,42,.18));animation:sweep 1.1s ease-in-out forwards}
+.stamp{position:absolute;right:20px;top:18px;font:700 24px/1 var(--head);padding:7px 14px;border:5px solid;border-radius:14px;background:var(--paper);animation:stamp .5s cubic-bezier(.2,1.6,.4,1) both;z-index:6}
+.stamp.bad{color:var(--chili);border-color:var(--chili);transform:rotate(-7deg)}
+.seal{position:absolute;right:16px;top:12px;width:96px;height:96px;border-radius:50%;background:var(--leaf);color:#fff;display:grid;place-items:center;text-align:center;font:700 22px/1 var(--head);border:5px double #fff;outline:4px solid var(--leaf);animation:stamp .6s cubic-bezier(.2,1.6,.4,1) both;z-index:6}
+.seal small{display:block;font:600 12px var(--body);margin-top:3px}
+.card.win{border-color:var(--leaf)}
+footer{padding:4px 36px 22px;display:flex;align-items:center;gap:20px}
+.lesson{font:700 28px/1.2 var(--head);color:var(--chai);opacity:0;transition:opacity .5s}
+.lesson.show{opacity:1}
+.hint{margin-left:auto;font-size:13px;color:var(--muted)}
+.hint kbd{border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:0 5px;font:12px var(--mono);background:var(--paper)}
+@keyframes pop{from{opacity:0;scale:.9}}
+@keyframes stamp{0%{opacity:0;scale:2.2}100%{opacity:1;scale:1}}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes sweep{0%{left:-20px;top:110px;opacity:0}10%{opacity:1}35%{top:150px}65%{top:110px}90%{opacity:1}100%{left:calc(100% - 50px);top:170px;opacity:0}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.v svg ellipse{stroke-dashoffset:0}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo" aria-hidden="true">🔍</div>
+  <div><h1>Spot the Safe Mandate</h1><div class="sub">Three slips. Only one is safe.</div></div>
+  <div class="btns">
+    <button class="btn main" id="reveal">Reveal (Space)</button>
+    <button class="btn" id="again">New round (N)</button>
+  </div>
+</header>
+<main id="cards" aria-live="polite"></main>
+<footer>
+  <div class="lesson" id="lesson">Sealed is not the same as safe.</div>
+  <div class="hint"><kbd>Space</kbd> reveal · <kbd>N</kbd> new round</div>
+</footer>
+<script>
+const $=s=>document.querySelector(s);
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const SHORT={"1. Who can pay?":"Who","2. How much?":"How much","3. Until when?":"Until","4. Can you prove it?":"Proof"};
+let data=[], revealed=false, busy=false;
+
+function until(t){
+  if(t==null) return null;
+  const d=new Date(t*1000), days=(t-Date.now()/1000)/86400;
+  return days>1 ? d.toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})
+                : d.toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"});
+}
+function v(key,text){return text==null?`<span class="v none" data-k="${key}">${key==="until"?"no end date":"none"}</span>`:`<span class="v" data-k="${key}">${esc(text)}</span>`}
+
+/* Which fields to circle, and what to scribble, for each failed question */
+function flaws(c){
+  const out=[], fail=q=>c.checks.find(x=>x.q.startsWith(q)&&!x.ok);
+  if(fail("1.")) out.push({keys:["who"],note:"anyone can use it!"});
+  if(fail("2.")){
+    const keys=[]; if(c.shop==="any shop")keys.push("shop"); if(c.max>1000)keys.push("max");
+    out.push({keys:keys.length?keys:["max"],note:c.max>1000?"₹1 lakh?! any shop?!":"too much"});
+  }
+  if(fail("3.")) out.push({keys:["until"],note:c.until==null?"never expires":"lasts a whole year"});
+  if(fail("4.")) out.push({keys:c.uses==="unlimited"?["seal","uses"]:["seal"],note:"no seal: anyone can edit it"});
+  return out;
+}
+
+async function load(){
+  if(busy)return;
+  data=await (await fetch("/api/spot")).json();
+  revealed=false; $("#lesson").classList.remove("show");
+  $("#cards").innerHTML=data.map(c=>`
+    <section class="card" id="c-${c.letter}">
+      <div class="letter">${c.letter}</div>
+      <div class="slip">
+        <span class="k">who</span><b>${v("who",c.who)}</b>
+        <span class="k">shop</span><b>${v("shop",c.shop)}</b>
+        <span class="k">max</span><b>${v("max","₹"+Number(c.max).toLocaleString("en-IN"))}</b>
+        <span class="k">until</span><b>${v("until",until(c.until))}</b>
+        <span class="k">uses</span><b>${v("uses",c.uses)}</b>
+        <span class="k">seal</span><b>${c.seal?`<span class="v" data-k="seal" style="font:15px var(--mono)">${esc(c.seal)}</span>`:v("seal",null)}</b>
+      </div>
+      <div class="notes"></div>
+      <div class="pills">${c.checks.map(x=>`<span class="pill ${x.ok?"ok":"no"}">${x.ok?"✓":"✗"} ${esc(SHORT[x.q]||x.q)}</span>`).join("")}</div>
+    </section>`).join("");
+}
+
+function circle(el){
+  el.classList.add("flaw");
+  const tilt=(Math.random()*6-3).toFixed(1);
+  el.insertAdjacentHTML("beforeend",`<svg viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><ellipse cx="50" cy="20" rx="48" ry="18" pathLength="1" transform="rotate(${tilt} 50 20)"/></svg>`);
+}
+
+async function reveal(){
+  if(revealed||busy||!data.length)return;
+  revealed=true; busy=true;
+  for(const c of data){
+    const card=$("#c-"+c.letter), notes=card.querySelector(".notes");
+    const g=document.createElement("div"); g.className="glass"; g.textContent="🔍"; g.setAttribute("aria-hidden","true");
+    card.appendChild(g); await sleep(700);
+    for(const f of flaws(c)){
+      f.keys.forEach(k=>{const el=card.querySelector(`.v[data-k="${k}"]`); if(el)circle(el)});
+      const n=document.createElement("div"); n.className="note"; n.textContent=f.note; notes.appendChild(n);
+      await sleep(40); n.classList.add("show"); await sleep(520);
+    }
+    if(c.safe){
+      const n=document.createElement("div"); n.className="note good"; n.textContent="nothing to circle ✓"; notes.appendChild(n);
+      await sleep(40); n.classList.add("show");
+    }
+    await sleep(300); g.remove();
+    card.querySelector(".pills").classList.add("show");
+    if(c.safe){card.insertAdjacentHTML("beforeend",`<div class="seal">SAFE<small>all 4 ✓</small></div>`);card.classList.add("win")}
+    else card.insertAdjacentHTML("beforeend",`<div class="stamp bad">NOT SAFE</div>`);
+    await sleep(600);
+  }
+  $("#lesson").classList.add("show");
+  busy=false;
+}
+
+$("#reveal").onclick=reveal;
+$("#again").onclick=load;
+document.addEventListener("keydown",e=>{
+  if(e.metaKey||e.ctrlKey||e.altKey)return;
+  if(e.key===" "||e.key==="Enter"){e.preventDefault();reveal()}
+  if(e.key==="n"||e.key==="N"){e.preventDefault();load()}
+});
+load();
+</script>
+</body>
+</html>
