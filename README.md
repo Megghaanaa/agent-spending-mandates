@@ -1,4 +1,4 @@
-# 💸 Agent Spending Mandates
+# Agent Spending Mandates
 ### *Let your AI agent ask. Let your code decide.*
 
 You gave your AI agent a credit card. Bold move.
